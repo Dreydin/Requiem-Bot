@@ -15,6 +15,7 @@ CREATE_CHANNEL_NAME = "➕ Create Group"
 async def on_ready():
     print(f"Chameleon online as: {bot.user}")
     print("Watching for players joining Create Group...")
+    await bot.tree.sync()
 
 
 @bot.event
@@ -50,15 +51,20 @@ async def on_voice_state_update(member, before, after):
                 print(f"Deleted empty channel: {channel.name}")
             except discord.NotFound:
                 pass
-@bot.command()
-async def rename(ctx, *, new_name: str):
-    if ctx.author.voice is None:
+@bot.tree.command(name="rename", description="Rename your group channel")
+async def rename(interaction: discord.Interaction, new_name: str):
+    if interaction.user.voice is None:
+        await interaction.response.send_message("You are not in a voice channel.", ephemeral=True)
         return
 
-    channel = ctx.author.voice.channel
+    channel = interaction.user.voice.channel
 
-    if channel.name.endswith("'s Group"):
-        await channel.edit(name=new_name)
+    if channel.name == CREATE_CHANNEL_NAME:
+        await interaction.response.send_message("You can't rename the Create Group channel.", ephemeral=True)
+        return
+
+    await channel.edit(name=new_name)
+    await interaction.response.send_message(f"Channel renamed to {new_name}.", ephemeral=True)
 
 
 token = os.getenv("DISCORD_BOT_TOKEN")
