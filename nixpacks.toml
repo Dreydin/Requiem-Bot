@@ -2,7 +2,7 @@
 nixPkgs = ["python312"]
 
 [phases.install]
-cmds = ["python -m pip install -r requirements.txt"]
+cmds = ["python -m insurepip && python -m pip install -r requirements.txt"]
 
 [start]
 CMD = "python chameleon.py"
