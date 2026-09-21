@@ -18,36 +18,30 @@ async def on_ready():
 
 @bot.event
 async def on_voice_state_update(member, before, after):
-    if after.channel is None:
-        return
 
-    if after.channel.name != CREATE_CHANNEL_NAME:
-        return
+    # Player joins Create Group
+    if after.channel is not None and after.channel.name == CREATE_CHANNEL_NAME:
 
-    guild = after.channel.guild
+        category = after.channel.category
 
-    category = after.channel.category
+        channel = await member.guild.create_voice_channel(
+            name=f"{member.display_name}'s Group",
+            category=category
+        )
 
-    channel = await guild.create_voice_channel(
-        name=f"{member.display_name}'s Group",
-        category=category
-    )
+        await member.move_to(channel)
 
-    await member.move_to(channel)
+        print(f"Created group channel for {member.display_name}")
 
-    print(f"Created group channel for {member.display_name}")
-
-
-@bot.event
-async def on_voice_state_update(member, before, after):
+    # Player leaves a temporary group
     if before.channel is not None:
+
         channel = before.channel
 
         if (
             channel.name != CREATE_CHANNEL_NAME
-            and channel.category is not None
-            and len(channel.members) == 0
             and channel.name.endswith("'s Group")
+            and len(channel.members) == 0
         ):
             try:
                 await channel.delete()
