@@ -7,7 +7,7 @@ intents.voice_states = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-CREATE_CHANNEL_NAME = "Create Group"
+CREATE_CHANNEL_NAME = "➕ Create Group"
 
 
 @bot.event
