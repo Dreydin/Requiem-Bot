@@ -1,1 +1,1 @@
-python chameleon.py
+python3 chameleon.py
