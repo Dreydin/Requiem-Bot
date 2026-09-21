@@ -50,6 +50,15 @@ async def on_voice_state_update(member, before, after):
                 print(f"Deleted empty channel: {channel.name}")
             except discord.NotFound:
                 pass
+@bot.command()
+async def rename(ctx, *, new_name: str):
+    if ctx.author.voice is None:
+        return
+
+    channel = ctx.author.voice.channel
+
+    if channel.name.endswith("'s Group"):
+        await channel.edit(name=new_name)
 
 
 token = os.getenv("DISCORD_BOT_TOKEN")
