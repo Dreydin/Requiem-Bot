@@ -9,6 +9,7 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 CREATE_CHANNEL_NAME = "➕ Create Group"
+TEMP_CHANNELS = set()
 
 
 @bot.event
@@ -33,6 +34,7 @@ async def on_voice_state_update(member, before, after):
         )
 
         await member.move_to(channel)
+        TEMP_CHANNELS.add(channel.id)
 
         print(f"Created group channel for {member.display_name}")
 
@@ -42,12 +44,12 @@ async def on_voice_state_update(member, before, after):
         channel = before.channel
 
         if (
-            channel.name != CREATE_CHANNEL_NAME
-            and channel.name.endswith("'s Group")
-            and len(channel.members) == 0
+            channel.id in TEMP_CHANNELS
+and len(channel.members) == 0
         ):
             try:
                 await channel.delete()
+                TEMP_CHANNELS.discard(channel.id)
                 print(f"Deleted empty channel: {channel.name}")
             except discord.NotFound:
                 pass
