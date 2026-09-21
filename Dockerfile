@@ -1,5 +1,5 @@
-FROM python:3.12-slim
+FROM python3.12-slim
 WORKDIR /ap
 COPY . .
-RUN pip install --no-cache-dir -r requirements.txt
-CMD
+RUN pipinstall-r requirements.txt
+CMD ["python", "chameleon.py"]
