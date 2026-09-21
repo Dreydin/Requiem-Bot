@@ -1,3 +1,0 @@
-providers = ["python"]
-[start]
-CMD = "python chameleon.py"
