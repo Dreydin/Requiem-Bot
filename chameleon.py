@@ -18,6 +18,7 @@ async def on_ready():
 
 @bot.event
 async def on_voice_state_update(member, before, after):
+    print(f"VOICE EVENT: {member.display_name} | {before.channel} -> {after.channel}")
 
     # Player joins Create Group
     if after.channel is not None and after.channel.name == CREATE_CHANNEL_NAME:
